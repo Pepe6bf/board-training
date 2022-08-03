@@ -4,13 +4,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -24,7 +19,7 @@ import java.util.Set;
         @Index(columnList = "createdBy"),
 })
 @Entity
-public class Article {
+public class Article extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -42,22 +37,6 @@ public class Article {
     // 양방향 매핑은 늘 고민해야한다.
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL) // 게시글이 삭제되면 댓글도 같이 삭제됨
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
-
-    @Column(nullable = false)
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false, length = 100)
-    @CreatedBy
-    private String createdBy;
-
-    @Column(nullable = false)
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
-
-    @Column(nullable = false, length = 100)
-    @LastModifiedBy
-    private String modifiedBy;
 
     @Builder
     public Article(String title, String content, String hashtag) {
