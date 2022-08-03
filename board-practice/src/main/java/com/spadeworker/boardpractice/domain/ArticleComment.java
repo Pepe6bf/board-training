@@ -1,13 +1,11 @@
 package com.spadeworker.boardpractice.domain;
 
-import lombok.*;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -18,8 +16,9 @@ import java.util.Objects;
         @Index(columnList = "createdBy"),
 })
 @Entity
-public class ArticleComment {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ArticleComment extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 500)
@@ -27,18 +26,6 @@ public class ArticleComment {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Article article;   // 게시글 (ID)
-
-    @Column(nullable = false)
-    @CreatedDate private LocalDateTime createdAt;
-
-    @Column(nullable = false, length = 100)
-    @CreatedBy private String createdBy;
-
-    @Column(nullable = false)
-    @LastModifiedDate private LocalDateTime modifiedAt;
-
-    @Column(nullable = false, length = 100)
-    @LastModifiedBy private String modifiedBy;
 
     @Builder
     public ArticleComment(Article article, String content) {
