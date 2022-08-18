@@ -33,9 +33,9 @@ public class Article extends BaseEntity {
     @Column
     private String hashtag; // 해시태그
 
-    @OrderBy("id")
     // 양방향 매핑은 늘 고민해야한다.
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL) // 게시글이 삭제되면 댓글도 같이 삭제됨
+    @OrderBy("id")
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
 
     @Builder
@@ -43,6 +43,10 @@ public class Article extends BaseEntity {
         this.title = title;
         this.content = content;
         this.hashtag = hashtag;
+    }
+
+    public static Article of(String title, String content, String hashtag) {
+        return new Article(title, content, hashtag);
     }
 
     // pattern matching 방식으로 리펙토링
