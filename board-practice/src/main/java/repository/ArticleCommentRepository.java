@@ -9,11 +9,16 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 
+import java.util.List;
+
 public interface ArticleCommentRepository extends
         JpaRepository<ArticleComment, Long>,
         QuerydslPredicateExecutor<ArticleComment>,
         QuerydslBinderCustomizer<QArticleComment>
 {
+
+    List<ArticleComment> findByArticle_Id(Long articleId);
+
     @Override
     default void customize(QuerydslBindings bindings, QArticleComment root) {
         // listing 하지 않은 프로퍼티는 검색에서 제외
