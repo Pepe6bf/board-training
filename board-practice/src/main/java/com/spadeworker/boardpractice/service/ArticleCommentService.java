@@ -3,7 +3,7 @@ package com.spadeworker.boardpractice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import repository.ArticleCommentRepository;
+import com.spadeworker.boardpractice.repository.ArticleCommentRepository;
 
 @RequiredArgsConstructor
 @Transactional

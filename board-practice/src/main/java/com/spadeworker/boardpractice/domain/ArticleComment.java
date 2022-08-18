@@ -2,7 +2,6 @@ package com.spadeworker.boardpractice.domain;
 
 import com.spadeworker.boardpractice.config.BaseEntity;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,27 +10,30 @@ import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(indexes = {
-        @Index(columnList = "content"),
-        @Index(columnList = "createdAt"),
-        @Index(columnList = "createdBy"),
-})
+@Table()
 @Entity
 public class ArticleComment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private Article article;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private UserAccount userAccount;
+
     @Column(nullable = false, length = 500)
     private String content; // 본문
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private Article article;   // 게시글 (ID)
-
-    @Builder
-    public ArticleComment(Article article, String content) {
+    public ArticleComment(Article article, UserAccount userAccount, String content) {
         this.article = article;
+        this.userAccount = userAccount;
         this.content = content;
+    }
+
+    public static ArticleComment of(Article article, UserAccount userAccount, String content) {
+        return new ArticleComment(article, userAccount, content);
     }
 
     // pattern matching 방식으로 리펙토링
