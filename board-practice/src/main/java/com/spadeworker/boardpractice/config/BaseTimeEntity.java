@@ -1,4 +1,4 @@
-package com.spadeworker.boardpractice.domain;
+package com.spadeworker.boardpractice.config;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
