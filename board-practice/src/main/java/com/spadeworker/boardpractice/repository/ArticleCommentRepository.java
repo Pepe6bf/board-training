@@ -1,4 +1,4 @@
-package repository;
+package com.spadeworker.boardpractice.repository;
 
 import com.querydsl.core.types.dsl.DateTimeExpression;
 import com.querydsl.core.types.dsl.StringExpression;

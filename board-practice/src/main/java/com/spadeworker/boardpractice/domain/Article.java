@@ -13,12 +13,7 @@ import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(indexes = {
-        @Index(columnList = "title"),
-        @Index(columnList = "hashtag"),
-        @Index(columnList = "created_at"),
-        @Index(columnList = "created_by"),
-})
+@Table()
 @Entity
 public class Article extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,15 +36,21 @@ public class Article extends BaseEntity {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL) // 게시글이 삭제되면 댓글도 같이 삭제됨
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
 
-    @Builder
-    public Article(String title, String content, String hashtag) {
+    public Article(UserAccount userAccount, String title, String content, String hashtag) {
+        this.userAccount = userAccount;
         this.title = title;
         this.content = content;
         this.hashtag = hashtag;
     }
 
     public static Article of(UserAccount userAccount, String title, String content, String hashtag) {
-        return new Article(title, content, hashtag);
+        return new Article(userAccount, title, content, hashtag);
+    }
+
+    public void update(String title, String content, String hashtag) {
+        this.title = title;
+        this.content = content;
+        this.hashtag = hashtag;
     }
 
     // pattern matching 방식으로 리펙토링

@@ -11,12 +11,7 @@ import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(indexes = {
-        @Index(columnList = "user_id"),
-        @Index(columnList = "email", unique = true),
-        @Index(columnList = "created_at"),
-        @Index(columnList = "created_by"),
-})
+@Table()
 @Entity
 public class UserAccount extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

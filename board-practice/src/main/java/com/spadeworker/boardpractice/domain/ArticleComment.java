@@ -10,11 +10,7 @@ import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(indexes = {
-        @Index(columnList = "content"),
-        @Index(columnList = "created_at"),
-        @Index(columnList = "created_by"),
-})
+@Table()
 @Entity
 public class ArticleComment extends BaseEntity {
     @Id

@@ -1,4 +1,4 @@
-package repository;
+package com.spadeworker.boardpractice.repository;
 
 import com.spadeworker.boardpractice.domain.UserAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
