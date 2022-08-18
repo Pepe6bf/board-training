@@ -9,13 +9,13 @@ logging:  # log level ??
 
 spring:
   datasource:
-    driver-class-name: org.h2.Driver
-  #    url: jdbc:mysql://localhost:3306/board
-#    username: pepe
-#    password: PeCaffeinePe12#$
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:h2:mem:testdb
-    username: sa
+#    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://localhost:3306/board
+    username: pepe
+    password: PeCaffeinePe12#$
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:h2:mem:testdb
+#    username: sa
   jpa:
     defer-datasource-initialization: true # data.sql ?? ???
     hibernate.ddl-auto: create

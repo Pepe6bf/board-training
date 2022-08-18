@@ -1,5 +1,6 @@
 package com.spadeworker.boardpractice.domain;
 
+import com.spadeworker.boardpractice.config.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,16 +13,10 @@ import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(indexes = {
-        @Index(columnList = "title"),
-        @Index(columnList = "hashtag"),
-        @Index(columnList = "createdAt"),
-        @Index(columnList = "createdBy"),
-})
+@Table()
 @Entity
 public class Article extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -33,13 +28,26 @@ public class Article extends BaseEntity {
     @Column
     private String hashtag; // 해시태그
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private UserAccount userAccount;
+
     @OrderBy("id")
     // 양방향 매핑은 늘 고민해야한다.
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL) // 게시글이 삭제되면 댓글도 같이 삭제됨
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
 
-    @Builder
-    public Article(String title, String content, String hashtag) {
+    public Article(UserAccount userAccount, String title, String content, String hashtag) {
+        this.userAccount = userAccount;
+        this.title = title;
+        this.content = content;
+        this.hashtag = hashtag;
+    }
+
+    public static Article of(UserAccount userAccount, String title, String content, String hashtag) {
+        return new Article(userAccount, title, content, hashtag);
+    }
+
+    public void update(String title, String content, String hashtag) {
         this.title = title;
         this.content = content;
         this.hashtag = hashtag;
