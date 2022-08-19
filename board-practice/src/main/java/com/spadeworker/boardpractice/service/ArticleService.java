@@ -48,6 +48,25 @@ public class ArticleService {
     }
 
     /**
+     * HashTag 로 게시물 검색 비즈니스
+     */
+    @Transactional(readOnly = true)
+    public Page<ArticleDto> searchArticlesViaHashtag(String hashtag, Pageable pageable) {
+        if (hashtag == null || hashtag.isBlank()) {
+            return Page.empty(pageable);
+        }
+
+        return articleRepository.findByHashtag(hashtag, pageable).map(ArticleDto::from);
+    }
+
+    /**
+     * HashTag 리스트 반환 비즈니스
+     */
+    public List<String> getHashtag() {
+        return articleRepository.findAllDistincHashtags();
+    }
+
+    /**
      * 게시글 단건 조회
      */
     @Transactional(readOnly = true)
