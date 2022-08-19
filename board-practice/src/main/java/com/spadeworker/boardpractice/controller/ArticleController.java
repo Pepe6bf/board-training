@@ -1,6 +1,7 @@
 package com.spadeworker.boardpractice.controller;
 
 import com.spadeworker.boardpractice.domain.SearchType;
+import com.spadeworker.boardpractice.dto.ArticleDto;
 import com.spadeworker.boardpractice.dto.response.ArticleResponse;
 import com.spadeworker.boardpractice.dto.response.ArticleWithCommentsResponse;
 import com.spadeworker.boardpractice.service.ArticleService;
@@ -33,6 +34,19 @@ public class ArticleController {
     ) {
          return articleService.searchArticles(searchType, searchValue, pageable)
                 .map(ArticleResponse::from).getContent();
+    }
+
+    /**
+     * 해시태그로 게시글 검색
+     */
+    @GetMapping("/search-hashtag")
+    public List<ArticleDto> searchHashtag(
+            @RequestParam(required = false, value = "search_value") String searchValue,
+            @PageableDefault
+                    (size = 10, sort = "createdAt", direction = Sort.Direction.DESC
+                    ) Pageable pageable
+    ) {
+        return articleService.searchArticlesViaHashtag(searchValue, pageable).getContent();
     }
 
     /**
