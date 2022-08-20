@@ -1,6 +1,6 @@
 package com.spadeworker.boardpractice.converter;
 
-import com.spadeworker.boardpractice.domain.SearchType;
+import com.spadeworker.boardpractice.domain.constant.SearchType;
 import org.springframework.core.convert.converter.Converter;
 
 public class SearchTypeRequestConverter implements Converter<String, SearchType> {

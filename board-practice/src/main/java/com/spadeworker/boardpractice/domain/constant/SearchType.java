@@ -1,4 +1,4 @@
-package com.spadeworker.boardpractice.domain;
+package com.spadeworker.boardpractice.domain.constant;
 
 public enum SearchType {
     TITLE("title"),

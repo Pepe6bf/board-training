@@ -1,7 +1,7 @@
 package com.spadeworker.boardpractice.service;
 
 import com.spadeworker.boardpractice.domain.Article;
-import com.spadeworker.boardpractice.domain.SearchType;
+import com.spadeworker.boardpractice.domain.constant.SearchType;
 import com.spadeworker.boardpractice.domain.UserAccount;
 import com.spadeworker.boardpractice.dto.ArticleDto;
 import com.spadeworker.boardpractice.dto.ArticleWithCommentsDto;

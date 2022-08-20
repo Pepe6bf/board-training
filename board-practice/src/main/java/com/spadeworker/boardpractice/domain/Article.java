@@ -2,7 +2,6 @@ package com.spadeworker.boardpractice.domain;
 
 import com.spadeworker.boardpractice.config.BaseEntity;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

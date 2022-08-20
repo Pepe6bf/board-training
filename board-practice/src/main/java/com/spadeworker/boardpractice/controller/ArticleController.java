@@ -1,6 +1,6 @@
 package com.spadeworker.boardpractice.controller;
 
-import com.spadeworker.boardpractice.domain.SearchType;
+import com.spadeworker.boardpractice.domain.constant.SearchType;
 import com.spadeworker.boardpractice.dto.ArticleDto;
 import com.spadeworker.boardpractice.dto.response.ArticleResponse;
 import com.spadeworker.boardpractice.dto.response.ArticleWithCommentsResponse;
