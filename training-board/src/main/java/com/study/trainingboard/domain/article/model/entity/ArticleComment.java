@@ -15,7 +15,7 @@ public class ArticleComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;  // 댓글 본문
 
     // TODO: meta data column 추가 하기(Audit)
