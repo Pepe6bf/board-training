@@ -1,16 +1,24 @@
 package com.study.trainingboard.domain.article.model.entity;
 
+import com.study.trainingboard.global.config.audit.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "article_comment")
+@Table(
+        name = "article_comment",
+        indexes = {
+                @Index(columnList = "createdAt"),
+                @Index(columnList = "createdBy")
+        }
+)
 @Entity
-public class ArticleComment {
+public class ArticleComment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,6 +26,37 @@ public class ArticleComment {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;  // 댓글 본문
 
-    // TODO: meta data column 추가 하기(Audit)
-    // TODO: 게시글 entity 와 연관관계 맺어주기
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    Article article;    // 연관 게시글
+
+    private ArticleComment(
+            String content,
+            Article article
+    ) {
+        this.content = content;
+        this.article = article;
+    }
+
+    public static ArticleComment of(
+            String content,
+            Article article
+    ) {
+        return new ArticleComment(
+                content,
+                article
+        );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ArticleComment that = (ArticleComment) o;
+        return id != null && getId().equals(that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 }
