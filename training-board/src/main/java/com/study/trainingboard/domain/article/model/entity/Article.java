@@ -1,10 +1,12 @@
 package com.study.trainingboard.domain.article.model.entity;
 
+import com.study.trainingboard.global.config.audit.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -12,13 +14,13 @@ import javax.persistence.*;
         name = "article",
         indexes = {
                 @Index(columnList = "title"),
-                @Index(columnList = "content"),
                 @Index(columnList = "hashtag"),
                 @Index(columnList = "createdAt"),
                 @Index(columnList = "createdBy")
-        })
+        }
+)
 @Entity
-public class Article {
+public class Article extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,5 +34,38 @@ public class Article {
     @Column
     private String hashtag;  // 게시글 해시태그
 
-    // TODO: meta data column 추가 하기(Audit)
+    private Article(
+            String title,
+            String content,
+            String hashtag
+    ) {
+        this.title = title;
+        this.content = content;
+        this.hashtag = hashtag;
+    }
+
+    public static Article of(
+            String title,
+            String content,
+            String hashtag
+    ) {
+        return new Article(
+                title,
+                content,
+                hashtag
+        );
+    }
+
+    // 각각의 객체를 비교하는 메서드
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Article article)) return false;
+        return id != null && id.equals(article.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
