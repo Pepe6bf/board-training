@@ -17,12 +17,15 @@ spring:
     password: ${spring.datasource.password}
     driver-class-name: ${spring.datasource.driver-class-name}
   jpa:
-#    defer-datasource-initialization: ${spring.jpa.defer-datasource-initialization}
     hibernate.ddl-auto: ${spring.jpa.hibernate.ddl-auto}
     open-in-view: ${spring.jpa.open-in-view}
     show-sql: ${spring.jpa.show-sql}
     properties:
       hibernate.format_sql: true
       hibernate.default_batch_fetch_size: 100
+    defer-datasource-initialization: true
+  sql.init.mode: always
+  data.rest:
+    base-path: /api
+    detection-strategy: annotated
   h2.console.enabled: true
-#  sql.init.mode: ${spring.sql.init.mode}
