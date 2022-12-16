@@ -29,3 +29,8 @@ spring:
     base-path: /api
     detection-strategy: annotated
   h2.console.enabled: true
+  thymeleaf3:
+    decoupled-logic: true
+
+
+
