@@ -41,6 +41,9 @@ dependencies {
 
 	// Thymeleaf 의존성
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	// Configuration Processor
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 }
 
 tasks.named('test') {
