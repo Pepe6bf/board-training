@@ -6,7 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -57,6 +59,9 @@ public class Article extends BaseEntity {
                 hashtag
         );
     }
+
+    @OneToMany(mappedBy = "article")
+    private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
 
     // 각각의 객체를 비교하는 메서드
     @Override
