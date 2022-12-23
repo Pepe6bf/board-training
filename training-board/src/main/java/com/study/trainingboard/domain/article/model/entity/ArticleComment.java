@@ -27,26 +27,31 @@ public class ArticleComment extends BaseEntity {
     private String content;  // 댓글 본문
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private UserAccount userAccount;
+    Article article;    // 연관 게시글
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    Article article;    // 연관 게시글
+    private UserAccount userAccount;
+
 
     private ArticleComment(
             String content,
-            Article article
+            Article article,
+            UserAccount userAccount
     ) {
         this.content = content;
         this.article = article;
+        this.userAccount = userAccount;
     }
 
     public static ArticleComment of(
             String content,
-            Article article
+            Article article,
+            UserAccount userAccount
     ) {
         return new ArticleComment(
                 content,
-                article
+                article,
+                userAccount
         );
     }
 

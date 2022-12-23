@@ -35,33 +35,37 @@ public class Article extends BaseEntity {
     @Column
     private String hashtag;  // 게시글 해시태그
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private UserAccount userAccount;
+
+    @OneToMany(mappedBy = "article")
+    private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
+
     private Article(
             String title,
             String content,
-            String hashtag
+            String hashtag,
+            UserAccount userAccount
     ) {
         this.title = title;
         this.content = content;
         this.hashtag = hashtag;
+        this.userAccount = userAccount;
     }
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private UserAccount userAccount;
 
     public static Article of(
             String title,
             String content,
-            String hashtag
+            String hashtag,
+            UserAccount userAccount
     ) {
         return new Article(
                 title,
                 content,
-                hashtag
+                hashtag,
+                userAccount
         );
     }
-
-    @OneToMany(mappedBy = "article")
-    private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
 
     // 각각의 객체를 비교하는 메서드
     @Override
