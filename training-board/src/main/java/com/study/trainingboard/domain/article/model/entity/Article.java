@@ -79,4 +79,17 @@ public class Article extends BaseEntity {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    /**
+     * 게시물 수정
+     */
+    public void update(
+            String title,
+            String content,
+            String hashtag
+    ) {
+        this.title = title;
+        this.content = content;
+        this.hashtag = hashtag;
+    }
 }
