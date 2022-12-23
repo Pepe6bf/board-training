@@ -4,6 +4,8 @@ import com.querydsl.core.types.dsl.DateTimeExpression;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.study.trainingboard.domain.article.model.entity.Article;
 import com.study.trainingboard.domain.article.model.entity.QArticle;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
@@ -15,6 +17,13 @@ public interface ArticleRepository extends
         JpaRepository<Article, Long>,
         QuerydslPredicateExecutor<Article>,
         QuerydslBinderCustomizer<QArticle> {
+
+    Page<Article> findByTitleContaining(Pageable pageable, String title);
+    Page<Article> findByContentContaining(Pageable pageable, String content);
+    Page<Article> findByUserAccount_EmailContaining(Pageable pageable, String email);
+    Page<Article> findByUserAccount_NicknameContaining(Pageable pageable, String nickname);
+    Page<Article> findByHashtag(Pageable pageable, String hashtag);
+
     @Override
     default void customize(
             QuerydslBindings bindings,
