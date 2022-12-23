@@ -20,6 +20,7 @@ public class UserAccountFixture {
                 1L,
                 "tester@email.com",
                 "testerPw1234!",
+                "tester",
                 LocalDateTime.now(),
                 "tester",
                 LocalDateTime.now(),
