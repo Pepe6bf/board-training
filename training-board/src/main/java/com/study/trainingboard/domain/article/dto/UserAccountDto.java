@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 public class UserAccountDto {
     private final Long id;
     private final String email;
+    private final String password;
     private final String nickname;
     private final LocalDateTime createdAt;
     private final String createdBy;
@@ -18,6 +19,7 @@ public class UserAccountDto {
     private UserAccountDto(
             Long id,
             String email,
+            String password,
             String  nickname,
             LocalDateTime createdAt,
             String createdBy,
@@ -26,6 +28,7 @@ public class UserAccountDto {
     ) {
         this.id = id;
         this.email = email;
+        this.password = password;
         this.nickname = nickname;
         this.createdAt = createdAt;
         this.createdBy = createdBy;
@@ -36,6 +39,7 @@ public class UserAccountDto {
     public static UserAccountDto of(
             Long id,
             String email,
+            String password,
             String nickname,
             LocalDateTime createdAt,
             String createdBy,
@@ -45,6 +49,7 @@ public class UserAccountDto {
         return new UserAccountDto(
                 id,
                 email,
+                password,
                 nickname,
                 createdAt,
                 createdBy,
@@ -57,11 +62,20 @@ public class UserAccountDto {
         return new UserAccountDto(
                 userAccount.getId(),
                 userAccount.getEmail(),
+                userAccount.getPassword(),
                 userAccount.getNickname(),
                 userAccount.getCreatedAt(),
                 userAccount.getCreatedBy(),
                 userAccount.getUpdatedAt(),
                 userAccount.getUpdatedBy()
+        );
+    }
+
+    public UserAccount toEntity() {
+        return UserAccount.of(
+                email,
+                password,
+                nickname
         );
     }
 }
