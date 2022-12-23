@@ -7,9 +7,11 @@ import java.time.LocalDateTime;
 
 @Getter
 public class ArticleCommentDto {
-    private Long id;
+    private final Long id;
 
-    private UserAccountDto userAccountDto;
+    private final Long articleId;
+
+    private final UserAccountDto userAccountDto;
 
     private final String content;
 
@@ -23,6 +25,7 @@ public class ArticleCommentDto {
 
     private ArticleCommentDto(
             Long id,
+            Long articleId,
             UserAccountDto userAccountDto,
             String content,
             LocalDateTime createdAt,
@@ -31,6 +34,7 @@ public class ArticleCommentDto {
             String updatedBy
     ) {
         this.id = id;
+        this.articleId = articleId;
         this.userAccountDto = userAccountDto;
         this.content = content;
         this.createdAt = createdAt;
@@ -41,6 +45,7 @@ public class ArticleCommentDto {
 
     public static ArticleCommentDto of(
             Long id,
+            Long articleId,
             UserAccountDto userAccountDto,
             String content,
             LocalDateTime createdAt,
@@ -50,6 +55,7 @@ public class ArticleCommentDto {
     ) {
         return new ArticleCommentDto(
                 id,
+                articleId,
                 userAccountDto,
                 content,
                 createdAt,
@@ -62,6 +68,7 @@ public class ArticleCommentDto {
     public static ArticleCommentDto from(ArticleComment articleComment) {
         return new ArticleCommentDto(
                 articleComment.getId(),
+                articleComment.getArticle().getId(),
                 UserAccountDto.from(articleComment.getUserAccount()),
                 articleComment.getContent(),
                 articleComment.getCreatedAt(),
