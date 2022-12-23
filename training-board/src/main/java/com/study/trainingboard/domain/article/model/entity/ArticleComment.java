@@ -27,6 +27,9 @@ public class ArticleComment extends BaseEntity {
     private String content;  // 댓글 본문
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private UserAccount userAccount;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     Article article;    // 연관 게시글
 
     private ArticleComment(

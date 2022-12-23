@@ -17,8 +17,7 @@ import java.util.Objects;
                 @Index(columnList = "hashtag"),
                 @Index(columnList = "createdAt"),
                 @Index(columnList = "createdBy")
-        }
-)
+        })
 @Entity
 public class Article extends BaseEntity {
     @Id
@@ -43,6 +42,9 @@ public class Article extends BaseEntity {
         this.content = content;
         this.hashtag = hashtag;
     }
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private UserAccount userAccount;
 
     public static Article of(
             String title,
