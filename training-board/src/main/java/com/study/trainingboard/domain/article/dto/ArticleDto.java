@@ -84,4 +84,13 @@ public class ArticleDto {
                 article.getUpdatedBy()
         );
     }
+
+    public Article toEntity() {
+        return Article.of(
+                title,
+                content,
+                hashtag,
+                userAccountDto.toEntity()
+        );
+    }
 }
