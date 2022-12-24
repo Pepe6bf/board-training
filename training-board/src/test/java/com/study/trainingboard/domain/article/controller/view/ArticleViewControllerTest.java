@@ -1,6 +1,7 @@
 package com.study.trainingboard.domain.article.controller.view;
 
 import com.study.trainingboard.domain.article.service.ArticleService;
+import com.study.trainingboard.domain.article.service.PaginationService;
 import com.study.trainingboard.global.config.SecurityConfig;
 import com.study.trainingboard.global.util.fixture.ArticleFixture;
 import org.junit.jupiter.api.Disabled;
@@ -11,9 +12,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -29,6 +34,9 @@ class ArticleViewControllerTest {
     @MockBean
     private ArticleService articleService;
 
+    @MockBean
+    private PaginationService paginationService;
+
     public ArticleViewControllerTest(@Autowired MockMvc mockMvc) {
         this.mockMvc = mockMvc;
     }
@@ -41,19 +49,69 @@ class ArticleViewControllerTest {
                 any(Pageable.class),
                 eq(null),
                 eq(null))
-        )
-                .willReturn(Page.empty());
+        ).willReturn(Page.empty());
+        given(paginationService.getPaginationBarNumbers(
+                anyInt(),
+                anyInt()
+        )).willReturn(List.of(0, 1, 2, 3, 4));
 
         // When & Then
         mockMvc.perform(get("/articles"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/index"))
-                .andExpect(model().attributeExists("articles"));
+                .andExpect(model().attributeExists("articles"))
+                .andExpect(model().attributeExists("paginationBarNumbers"));
         then(articleService).should().searchArticles(
                 any(Pageable.class),
                 eq(null),
                 eq(null)
+        );
+        then(paginationService).should().getPaginationBarNumbers(
+                anyInt(),
+                anyInt()
+        );
+    }
+
+    @DisplayName("[view][GET] 게시글 리스트 (게시판) 페이지 - 페이징, 정렬 기능")
+    @Test
+    void 게시글_페이징_테스트() throws Exception {
+        // Given
+        String sortName = "title";
+        String direction ="desc";
+        int pageNumber = 0;
+        int pageSize = 5;
+        Pageable pageable = PageRequest.of(
+                pageNumber,
+                pageSize,
+                Sort.by(Sort.Order.desc(sortName))
+        );
+        List<Integer> barNumbers = List.of(1, 2, 3, 4, 5);
+        given(articleService.searchArticles(pageable, null, null))
+                .willReturn(Page.empty());
+        given(paginationService.getPaginationBarNumbers(
+                pageable.getPageNumber(),
+                Page.empty().getTotalPages()
+        )).willReturn(barNumbers);
+
+
+        // When & Then
+        mockMvc.perform(
+                        get("/articles")
+                                .queryParam("page", String.valueOf(pageNumber))
+                                .queryParam("size", String.valueOf(pageSize))
+                                .queryParam("sort", sortName + "," + direction)
+
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(view().name("articles/index"))
+                .andExpect(model().attributeExists("articles"))
+                .andExpect(model().attribute("paginationBarNumbers", barNumbers));
+        then(articleService).should().searchArticles(pageable, null, null);
+        then(paginationService).should().getPaginationBarNumbers(
+                pageable.getPageNumber(),
+                Page.empty().getTotalPages()
         );
     }
 
