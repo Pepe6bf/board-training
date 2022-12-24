@@ -6,7 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -17,8 +19,7 @@ import java.util.Objects;
                 @Index(columnList = "hashtag"),
                 @Index(columnList = "createdAt"),
                 @Index(columnList = "createdBy")
-        }
-)
+        })
 @Entity
 public class Article extends BaseEntity {
     @Id
@@ -34,25 +35,35 @@ public class Article extends BaseEntity {
     @Column
     private String hashtag;  // 게시글 해시태그
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private UserAccount userAccount;
+
+    @OneToMany(mappedBy = "article")
+    private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
+
     private Article(
             String title,
             String content,
-            String hashtag
+            String hashtag,
+            UserAccount userAccount
     ) {
         this.title = title;
         this.content = content;
         this.hashtag = hashtag;
+        this.userAccount = userAccount;
     }
 
     public static Article of(
             String title,
             String content,
-            String hashtag
+            String hashtag,
+            UserAccount userAccount
     ) {
         return new Article(
                 title,
                 content,
-                hashtag
+                hashtag,
+                userAccount
         );
     }
 
@@ -67,5 +78,18 @@ public class Article extends BaseEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    /**
+     * 게시물 수정
+     */
+    public void update(
+            String title,
+            String content,
+            String hashtag
+    ) {
+        this.title = title;
+        this.content = content;
+        this.hashtag = hashtag;
     }
 }

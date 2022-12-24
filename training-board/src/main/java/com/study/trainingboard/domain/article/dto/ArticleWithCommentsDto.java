@@ -4,30 +4,36 @@ import com.study.trainingboard.domain.article.model.entity.Article;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
-public class ArticleDto {
-    private final Long id;
+public class ArticleWithCommentsDto {
+    Long id;
 
-    private final UserAccountDto userAccountDto;
+    UserAccountDto userAccountDto;
 
-    private final String title;
+    Set<ArticleCommentDto> articleCommentDtos;
 
-    private final String content;
+    String title;
 
-    private final String hashtag;
+    String content;
 
-    private final LocalDateTime createdAt;
+    String hashtag;
 
-    private final String createdBy;
+    LocalDateTime createdAt;
 
-    private final LocalDateTime updatedAt;
+    String createdBy;
 
-    private final String updatedBy;
+    LocalDateTime updatedAt;
 
-    private ArticleDto(
+    String updatedBy;
+
+    private ArticleWithCommentsDto(
             Long id,
             UserAccountDto userAccountDto,
+            Set<ArticleCommentDto> articleCommentDtos,
             String title,
             String content,
             String hashtag,
@@ -38,6 +44,7 @@ public class ArticleDto {
     ) {
         this.id = id;
         this.userAccountDto = userAccountDto;
+        this.articleCommentDtos = articleCommentDtos;
         this.title = title;
         this.content = content;
         this.hashtag = hashtag;
@@ -47,9 +54,10 @@ public class ArticleDto {
         this.updatedBy = updatedBy;
     }
 
-    public static ArticleDto of(
+    public static ArticleWithCommentsDto of(
             Long id,
             UserAccountDto userAccountDto,
+            Set<ArticleCommentDto> articleCommentDtos,
             String title,
             String content,
             String hashtag,
@@ -58,9 +66,10 @@ public class ArticleDto {
             LocalDateTime updatedAt,
             String updatedBy
     ) {
-        return new ArticleDto(
+        return new ArticleWithCommentsDto(
                 id,
                 userAccountDto,
+                articleCommentDtos,
                 title,
                 content,
                 hashtag,
@@ -71,10 +80,14 @@ public class ArticleDto {
         );
     }
 
-    public static ArticleDto from(Article article) {
-        return new ArticleDto(
+    public static ArticleWithCommentsDto from(Article article) {
+        return new ArticleWithCommentsDto(
                 article.getId(),
                 UserAccountDto.from(article.getUserAccount()),
+                article.getArticleComments()
+                        .stream()
+                        .map(ArticleCommentDto::from)
+                        .collect(Collectors.toCollection(LinkedHashSet::new)),
                 article.getTitle(),
                 article.getContent(),
                 article.getHashtag(),
@@ -82,15 +95,6 @@ public class ArticleDto {
                 article.getCreatedBy(),
                 article.getUpdatedAt(),
                 article.getUpdatedBy()
-        );
-    }
-
-    public Article toEntity() {
-        return Article.of(
-                title,
-                content,
-                hashtag,
-                userAccountDto.toEntity()
         );
     }
 }
