@@ -18,6 +18,7 @@ public class ArticleCommentFixture {
     public static ArticleCommentDto createArticleCommentDto(String content) {
         return ArticleCommentDto.of(
                 1L,
+                1L,
                 UserAccountFixture.createUserAccountDto(),
                 content,
                 LocalDateTime.now(),
