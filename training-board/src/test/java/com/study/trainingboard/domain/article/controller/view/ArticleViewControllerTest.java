@@ -1,15 +1,21 @@
 package com.study.trainingboard.domain.article.controller.view;
 
+import com.study.trainingboard.domain.article.service.ArticleService;
 import com.study.trainingboard.global.config.SecurityConfig;
+import com.study.trainingboard.global.util.fixture.ArticleFixture;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -20,6 +26,9 @@ class ArticleViewControllerTest {
 
     private final MockMvc mockMvc;
 
+    @MockBean
+    private ArticleService articleService;
+
     public ArticleViewControllerTest(@Autowired MockMvc mockMvc) {
         this.mockMvc = mockMvc;
     }
@@ -28,6 +37,12 @@ class ArticleViewControllerTest {
     @DisplayName("[view][GET] 게시글 리스트 (게시판) 페이지 - 정상 호출")
     void view_get_test() throws Exception {
         // Given
+        given(articleService.searchArticles(
+                any(Pageable.class),
+                eq(null),
+                eq(null))
+        )
+                .willReturn(Page.empty());
 
         // When & Then
         mockMvc.perform(get("/articles"))
@@ -35,12 +50,20 @@ class ArticleViewControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/index"))
                 .andExpect(model().attributeExists("articles"));
+        then(articleService).should().searchArticles(
+                any(Pageable.class),
+                eq(null),
+                eq(null)
+        );
     }
 
     @Test
     @DisplayName("[view][GET] 게시글 상세 페이지 - 정상 호출")
     void view_detail_page_test() throws Exception {
         // Given
+        Long articleId = 1L;
+        given(articleService.getArticle(articleId))
+                .willReturn(ArticleFixture.createArticleWithCommentsDto());
 
         // When
 
@@ -51,6 +74,7 @@ class ArticleViewControllerTest {
                 .andExpect(view().name("articles/detail"))
                 .andExpect(model().attributeExists("article"))
                 .andExpect(model().attributeExists("articleComments"));
+        then(articleService).should().getArticle(articleId);
     }
 
     @Disabled("구현 중")
