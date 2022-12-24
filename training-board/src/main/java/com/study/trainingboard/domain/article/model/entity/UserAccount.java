@@ -14,6 +14,7 @@ import java.util.Objects;
         name = "user_account",
         indexes = {
             @Index(columnList = "email", unique = true),
+            @Index(columnList = "nickname", unique = true),
             @Index(columnList = "createdAt"),
             @Index(columnList = "createdBy")
         })
@@ -23,13 +24,13 @@ public class UserAccount extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false, length = 500)
     private String password;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 100, unique = true)
     private String nickname;
 
     private UserAccount(
