@@ -1,5 +1,6 @@
 package com.study.trainingboard.domain.article.controller.view;
 
+import com.study.trainingboard.domain.article.model.constant.SearchType;
 import com.study.trainingboard.domain.article.service.ArticleService;
 import com.study.trainingboard.domain.article.service.PaginationService;
 import com.study.trainingboard.global.config.SecurityConfig;
@@ -73,12 +74,50 @@ class ArticleViewControllerTest {
         );
     }
 
+    @Test
+    @DisplayName("[view][GET] 게시글 리스트 (게시판) 페이지 - 검색어와 함께 호출")
+    void 게시글_검색_테스트() throws Exception {
+        // Given
+        SearchType searchType = SearchType.TITLE;
+        String searchValue = "title";
+        given(articleService.searchArticles(
+                any(Pageable.class),
+                eq(searchType),
+                eq(searchValue)
+        )).willReturn(Page.empty());
+        given(paginationService.getPaginationBarNumbers(
+                anyInt(),
+                anyInt()
+        )).willReturn(List.of(0, 1, 2, 3, 4));
+
+        // When & Then
+        mockMvc.perform(
+                        get("/articles")
+                                .queryParam("searchType", searchType.toString())
+                                .queryParam("searchValue", searchValue)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(view().name("articles/index"))
+                .andExpect(model().attributeExists("articles"))
+                .andExpect(model().attributeExists("searchTypes"));
+        then(articleService).should().searchArticles(
+                any(Pageable.class),
+                eq(searchType),
+                eq(searchValue)
+        );
+        then(paginationService).should().getPaginationBarNumbers(
+                anyInt(),
+                anyInt()
+        );
+    }
+
     @DisplayName("[view][GET] 게시글 리스트 (게시판) 페이지 - 페이징, 정렬 기능")
     @Test
     void 게시글_페이징_테스트() throws Exception {
         // Given
         String sortName = "title";
-        String direction ="desc";
+        String direction = "desc";
         int pageNumber = 0;
         int pageSize = 5;
         Pageable pageable = PageRequest.of(
