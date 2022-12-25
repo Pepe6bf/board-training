@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
 
 import static com.study.trainingboard.global.util.fixture.ArticleFixture.createArticle;
@@ -74,6 +75,43 @@ class ArticleServiceTest {
                 pageable,
                 searchKeyword
         );
+    }
+
+    @Test
+    @DisplayName("검색어 없이 게시글을 해시태그 검색하면, 빈 페이지를 반환한다.")
+    void 게시글검색어_없이_해시태그_검색_테스트() throws Exception {
+        // Given
+        Pageable pageable = Pageable.ofSize(20);
+
+        // When
+        Page<ArticleDto> articles = sut.searchArticlesViaHashtag(
+                pageable,
+                null
+        );
+
+        // Then
+        assertThat(articles).isEqualTo(Page.empty(pageable));
+        then(articleRepository).shouldHaveNoInteractions();
+    }
+
+    @Test
+    @DisplayName("게시글을 해시태그 검색하면, 게시글 페이지를 반환한다.")
+    void 해시태그_검색_테스트() throws Exception {
+        // Given
+        String hashtag = "#java";
+        Pageable pageable = Pageable.ofSize(20);
+        given(articleRepository.findByHashtag(pageable, hashtag))
+                .willReturn(Page.empty(pageable));
+
+        // When
+        Page<ArticleDto> articles = sut.searchArticlesViaHashtag(
+                pageable,
+                hashtag
+        );
+
+        // Then
+        assertThat(articles).isEqualTo(Page.empty(pageable));
+        then(articleRepository).should().findByHashtag(pageable, hashtag);
     }
 
     @Test
@@ -186,4 +224,35 @@ class ArticleServiceTest {
         then(articleRepository).should().deleteById(articleId);
     }
 
+    @DisplayName("게시글 수를 조회하면, 게시글 수를 반환한다.")
+    @Test
+    void 게시글수_조회_테스트() throws Exception {
+        // Given
+        Long expected = 0L;
+        given(articleRepository.count())
+                .willReturn(expected);
+
+        // When
+        Long actual = sut.getArticleCount();
+
+        // Then
+        assertThat(actual).isEqualTo(expected);
+        then(articleRepository).should().count();
+    }
+
+    @DisplayName("해시태그를 조회하면, 유니크 해시태그 리스트를 반환한다")
+    @Test        
+    void 해시태그_조회시_유니크해시태그리스트_반환_테스트() throws Exception {
+        // Given
+        List<String> expectedHashtags = List.of("#java", "#spring", "#boot");
+        given(articleRepository.findAllDistinctHashtags())
+                .willReturn(expectedHashtags);
+
+        // When
+        List<String> actualHashtags = sut.getHashtags();
+        
+        // Then
+        assertThat(actualHashtags).isEqualTo(expectedHashtags);
+        then(articleRepository).should().findAllDistinctHashtags();
+    }
 }
