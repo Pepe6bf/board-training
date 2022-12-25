@@ -1,6 +1,7 @@
 package com.study.trainingboard.domain.article.dto;
 
 import com.study.trainingboard.domain.article.model.entity.Article;
+import com.study.trainingboard.domain.article.model.entity.UserAccount;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -71,6 +72,25 @@ public class ArticleDto {
         );
     }
 
+    public static ArticleDto of(
+            UserAccountDto userAccountDto,
+            String title,
+            String content,
+            String hashtag
+    ) {
+        return new ArticleDto(
+                null,
+                userAccountDto,
+                title,
+                content,
+                hashtag,
+                null,
+                null,
+                null,
+                null
+        );
+    }
+
     public static ArticleDto from(Article article) {
         return new ArticleDto(
                 article.getId(),
@@ -85,12 +105,12 @@ public class ArticleDto {
         );
     }
 
-    public Article toEntity() {
+    public Article toEntity(UserAccount userAccount) {
         return Article.of(
                 title,
                 content,
                 hashtag,
-                userAccountDto.toEntity()
+                userAccount
         );
     }
 }

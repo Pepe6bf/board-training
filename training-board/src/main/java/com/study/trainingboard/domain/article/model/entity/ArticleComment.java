@@ -67,4 +67,8 @@ public class ArticleComment extends BaseEntity {
     public int hashCode() {
         return Objects.hash(getId());
     }
+
+    public void update(String content) {
+        this.content = content;
+    }
 }
