@@ -71,6 +71,25 @@ public class ArticleDto {
         );
     }
 
+    public static ArticleDto of(
+            UserAccountDto userAccountDto,
+            String title,
+            String content,
+            String hashtag
+    ) {
+        return new ArticleDto(
+                null,
+                userAccountDto,
+                title,
+                content,
+                hashtag,
+                null,
+                null,
+                null,
+                null
+        );
+    }
+
     public static ArticleDto from(Article article) {
         return new ArticleDto(
                 article.getId(),
