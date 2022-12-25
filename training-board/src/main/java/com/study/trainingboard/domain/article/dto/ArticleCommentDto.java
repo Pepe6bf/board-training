@@ -1,6 +1,8 @@
 package com.study.trainingboard.domain.article.dto;
 
+import com.study.trainingboard.domain.article.model.entity.Article;
 import com.study.trainingboard.domain.article.model.entity.ArticleComment;
+import com.study.trainingboard.domain.article.model.entity.UserAccount;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -44,6 +46,23 @@ public class ArticleCommentDto {
     }
 
     public static ArticleCommentDto of(
+            Long articleId,
+            UserAccountDto userAccountDto,
+            String content
+    ) {
+        return new ArticleCommentDto(
+                null,
+                articleId,
+                userAccountDto,
+                content,
+                null,
+                null,
+                null,
+                null
+        );
+    }
+
+    public static ArticleCommentDto of(
             Long id,
             Long articleId,
             UserAccountDto userAccountDto,
@@ -75,6 +94,17 @@ public class ArticleCommentDto {
                 articleComment.getCreatedBy(),
                 articleComment.getUpdatedAt(),
                 articleComment.getUpdatedBy()
+        );
+    }
+
+    public ArticleComment toEntity(
+            Article article,
+            UserAccount userAccount
+    ) {
+        return ArticleComment.of(
+                content,
+                article,
+                userAccount
         );
     }
 }

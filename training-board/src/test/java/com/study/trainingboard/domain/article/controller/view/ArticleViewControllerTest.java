@@ -2,7 +2,6 @@ package com.study.trainingboard.domain.article.controller.view;
 
 import com.study.trainingboard.domain.article.dto.ArticleDto;
 import com.study.trainingboard.domain.article.dto.request.ArticleRequest;
-import com.study.trainingboard.domain.article.dto.response.ArticleResponse;
 import com.study.trainingboard.domain.article.model.constant.FormStatus;
 import com.study.trainingboard.domain.article.model.constant.SearchType;
 import com.study.trainingboard.domain.article.service.ArticleService;
