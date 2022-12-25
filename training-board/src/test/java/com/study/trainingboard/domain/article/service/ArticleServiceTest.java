@@ -5,6 +5,7 @@ import com.study.trainingboard.domain.article.dto.ArticleWithCommentsDto;
 import com.study.trainingboard.domain.article.model.constant.SearchType;
 import com.study.trainingboard.domain.article.model.entity.Article;
 import com.study.trainingboard.domain.article.repository.ArticleRepository;
+import com.study.trainingboard.domain.article.repository.UserAccountRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +34,9 @@ class ArticleServiceTest {
     private ArticleService sut;
     @Mock
     private ArticleRepository articleRepository;
+
+    @Mock
+    private UserAccountRepository userAccountRepository;
 
     @Test
     @DisplayName("검색어 없이 게시글을 검색하면, 게시글 페이지를 반환한다.")
@@ -124,7 +128,7 @@ class ArticleServiceTest {
                 .willReturn(Optional.of(article));
 
         // When
-        ArticleWithCommentsDto dto = sut.getArticle(articleId);
+        ArticleWithCommentsDto dto = sut.getArticleWithComments(articleId);
 
         // Then
         assertThat(dto)
@@ -157,6 +161,8 @@ class ArticleServiceTest {
     void 게시글_생성_테스트() throws Exception {
         // Given
         ArticleDto dto = createArticleDto();
+        given(userAccountRepository.findByEmail(dto.getUserAccountDto().getEmail()))
+                .willReturn(dto.getUserAccountDto().toEntity());
         given(articleRepository.save(any(Article.class)))
                 .willReturn(createArticle());
 
@@ -164,6 +170,7 @@ class ArticleServiceTest {
         sut.saveArticle(dto);
 
         // Then
+        then(userAccountRepository).should().findByEmail(dto.getUserAccountDto().getEmail());
         then(articleRepository).should().save(any(Article.class));
     }
 
@@ -181,7 +188,7 @@ class ArticleServiceTest {
                 .willReturn(article);
 
         // When
-        sut.updateArticle(articleDto);
+        sut.updateArticle(articleDto.getId(), articleDto);
 
         // Then
         assertThat(article)
@@ -204,7 +211,7 @@ class ArticleServiceTest {
                 .willThrow(EntityNotFoundException.class);
 
         // When
-        sut.updateArticle(articleDto);
+        sut.updateArticle(articleDto.getId(), articleDto);
 
         // Then
         then(articleRepository).should().getReferenceById(articleDto.getId());

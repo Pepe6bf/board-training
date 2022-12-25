@@ -1,6 +1,7 @@
 package com.study.trainingboard.domain.article.dto;
 
 import com.study.trainingboard.domain.article.model.entity.Article;
+import com.study.trainingboard.domain.article.model.entity.UserAccount;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -104,12 +105,12 @@ public class ArticleDto {
         );
     }
 
-    public Article toEntity() {
+    public Article toEntity(UserAccount userAccount) {
         return Article.of(
                 title,
                 content,
                 hashtag,
-                userAccountDto.toEntity()
+                userAccount
         );
     }
 }

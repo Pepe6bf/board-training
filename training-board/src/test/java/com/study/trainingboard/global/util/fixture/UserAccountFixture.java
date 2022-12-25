@@ -17,7 +17,6 @@ public class UserAccountFixture {
 
     public static UserAccountDto createUserAccountDto() {
         return UserAccountDto.of(
-                1L,
                 "tester@email.com",
                 "testerPw1234!",
                 "tester",

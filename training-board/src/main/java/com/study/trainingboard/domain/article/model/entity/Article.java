@@ -38,7 +38,7 @@ public class Article extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private UserAccount userAccount;
 
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
 
     private Article(

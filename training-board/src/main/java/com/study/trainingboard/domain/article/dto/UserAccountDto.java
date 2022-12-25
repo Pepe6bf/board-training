@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 
 @Getter
 public class UserAccountDto {
-    private final Long id;
     private final String email;
     private final String password;
     private final String nickname;
@@ -17,7 +16,6 @@ public class UserAccountDto {
     private final String updatedBy;
 
     private UserAccountDto(
-            Long id,
             String email,
             String password,
             String  nickname,
@@ -26,7 +24,6 @@ public class UserAccountDto {
             LocalDateTime updatedAt,
             String updatedBy
     ) {
-        this.id = id;
         this.email = email;
         this.password = password;
         this.nickname = nickname;
@@ -37,7 +34,22 @@ public class UserAccountDto {
     }
 
     public static UserAccountDto of(
-            Long id,
+            String email,
+            String password,
+            String nickname
+    ) {
+        return new UserAccountDto(
+                email,
+                password,
+                nickname,
+                null,
+                null,
+                null,
+                null
+        );
+    }
+
+    public static UserAccountDto of(
             String email,
             String password,
             String nickname,
@@ -47,7 +59,6 @@ public class UserAccountDto {
             String updatedBy
     ) {
         return new UserAccountDto(
-                id,
                 email,
                 password,
                 nickname,
@@ -60,7 +71,6 @@ public class UserAccountDto {
 
     public static UserAccountDto from(UserAccount userAccount) {
         return new UserAccountDto(
-                userAccount.getId(),
                 userAccount.getEmail(),
                 userAccount.getPassword(),
                 userAccount.getNickname(),
