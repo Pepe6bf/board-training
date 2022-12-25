@@ -46,7 +46,7 @@
                 <attr sel="tr[0]" th:each="article : ${articles}">
                     <attr sel="td.title/a" th:text="${article.title}" th:href="@{'/articles/' + ${article.id}}" />
                     <attr sel="td.content/span" th:text="${article.content}" />
-                    <attr sel="td.user-nickname" th:text="${article.nickname}" />
+                    <attr sel="td.user-id" th:text="${article.nickname}" />
                     <attr sel="td.created-at/time" th:datetime="${article.createdAt}" th:text="${#temporals.format(article.createdAt, 'yyyy-MM-dd')}" />
                 </attr>
             </attr>
