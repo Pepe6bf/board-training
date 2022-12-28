@@ -37,7 +37,7 @@ public class ArticleCommentService {
     public void saveArticleComment(ArticleCommentDto dto) {
         try {
             Article article = articleRepository.getReferenceById(dto.getArticleId());
-            UserAccount userAccount = userAccountRepository.findByEmail(dto.getUserAccountDto().getEmail());
+            UserAccount userAccount = userAccountRepository.findByEmail(dto.getUserAccountDto().getEmail()).get();
             articleCommentRepository.save(dto.toEntity(article, userAccount));
         } catch (EntityNotFoundException e) {
             log.warn("댓글 저장 실패. 댓글 작성에 필요한 정보를 찾을 수 없습니다. - {}", e.getLocalizedMessage());
@@ -53,8 +53,10 @@ public class ArticleCommentService {
         }
     }
 
-    public void deleteArticleComment(Long articleCommentId) {
-        articleCommentRepository.deleteById(articleCommentId
-        );
+    public void deleteArticleComment(
+            Long articleCommentId,
+            String userEmail
+    ) {
+        articleCommentRepository.deleteByIdAndUserAccount_Email(articleCommentId, userEmail);
     }
 }

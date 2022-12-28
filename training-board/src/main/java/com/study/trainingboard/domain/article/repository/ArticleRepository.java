@@ -26,6 +26,8 @@ public interface ArticleRepository extends
     Page<Article> findByUserAccount_NicknameContaining(Pageable pageable, String nickname);
     Page<Article> findByHashtag(Pageable pageable, String hashtag);
 
+    void deleteByIdAndUserAccount_Email(Long articleId, String email);
+
     @Override
     default void customize(
             QuerydslBindings bindings,
