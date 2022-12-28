@@ -73,7 +73,7 @@ public class ArticleService {
     }
 
     public void saveArticle(ArticleDto dto) {
-        UserAccount userAccount = userAccountRepository.findByEmail(dto.getUserAccountDto().getEmail());
+        UserAccount userAccount = userAccountRepository.findByEmail(dto.getUserAccountDto().getEmail()).get();
         articleRepository.save(dto.toEntity(userAccount));
     }
 
@@ -83,18 +83,23 @@ public class ArticleService {
     ) {
         try {
             Article savedArticle = articleRepository.getReferenceById(articleId);
-            savedArticle.update(
-                    dto.getTitle(),
-                    dto.getContent(),
-                    dto.getHashtag()
-            );
+            UserAccount userAccount = userAccountRepository.findByEmail(dto.getUserAccountDto().getEmail())
+                    .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자입니다."));
+
+            if (savedArticle.getUserAccount().equals(userAccount)) {
+                savedArticle.update(
+                        dto.getTitle(),
+                        dto.getContent(),
+                        dto.getHashtag()
+                );
+            }
         } catch (EntityNotFoundException e) {
-            log.warn("게시글 업데이트 실패. 게시글을 찾을 수 없습니다. - dto : {}", dto);
+            log.warn("게시글 업데이트 실패. 게시글을 수정하는데 필요한 정보를 찾을 수 없습니다. - dto : {}", dto);
         }
     }
 
-    public void deleteArticle(Long articleId) {
-        articleRepository.deleteById(articleId);
+    public void deleteArticle(Long articleId, String userEmail) {
+        articleRepository.deleteByIdAndUserAccount_Email(articleId, userEmail);
     }
 
     public Long getArticleCount() {

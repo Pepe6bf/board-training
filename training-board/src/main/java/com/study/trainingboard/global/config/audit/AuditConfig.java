@@ -1,9 +1,13 @@
 package com.study.trainingboard.global.config.audit;
 
+import com.study.trainingboard.domain.article.dto.security.BoardPrincipal;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
 
@@ -12,8 +16,11 @@ import java.util.Optional;
 public class AuditConfig {
     @Bean
     public AuditorAware<String> auditorProvider() {
-
-        // TODO: Spring Security 로 인증 기능을 도입할 때 수정할 것
-        return () -> Optional.of("tester");
+        return () -> Optional.ofNullable(SecurityContextHolder.getContext())
+                .map(SecurityContext::getAuthentication)
+                .filter(Authentication::isAuthenticated)
+                .map(Authentication::getPrincipal)
+                .map(BoardPrincipal.class::cast)
+                .map(BoardPrincipal::getUsername);
     }
 }

@@ -6,6 +6,7 @@ import com.study.trainingboard.domain.article.model.constant.SearchType;
 import com.study.trainingboard.domain.article.model.entity.Article;
 import com.study.trainingboard.domain.article.repository.ArticleRepository;
 import com.study.trainingboard.domain.article.repository.UserAccountRepository;
+import com.study.trainingboard.global.util.fixture.UserAccountFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 import static com.study.trainingboard.global.util.fixture.ArticleFixture.createArticle;
 import static com.study.trainingboard.global.util.fixture.ArticleFixture.createArticleDto;
+import static com.study.trainingboard.global.util.fixture.UserAccountFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
@@ -162,7 +164,7 @@ class ArticleServiceTest {
         // Given
         ArticleDto dto = createArticleDto();
         given(userAccountRepository.findByEmail(dto.getUserAccountDto().getEmail()))
-                .willReturn(dto.getUserAccountDto().toEntity());
+                .willReturn(Optional.of(dto.getUserAccountDto().toEntity()));
         given(articleRepository.save(any(Article.class)))
                 .willReturn(createArticle());
 
@@ -186,6 +188,8 @@ class ArticleServiceTest {
         );
         given(articleRepository.getReferenceById(articleDto.getId()))
                 .willReturn(article);
+        given(userAccountRepository.findByEmail(articleDto.getUserAccountDto().getEmail()))
+                .willReturn(Optional.of(article.getUserAccount()));
 
         // When
         sut.updateArticle(articleDto.getId(), articleDto);
@@ -196,6 +200,7 @@ class ArticleServiceTest {
                 .hasFieldOrPropertyWithValue("content", articleDto.getContent())
                 .hasFieldOrPropertyWithValue("hashtag", articleDto.getHashtag());
         then(articleRepository).should().getReferenceById(articleDto.getId());
+        then(userAccountRepository).should().findByEmail(articleDto.getUserAccountDto().getEmail());
     }
 
     @Test
@@ -222,13 +227,14 @@ class ArticleServiceTest {
     void 게시글_삭제_테스트() throws Exception {
         // Given
         Long articleId = 1L;
-        willDoNothing().given(articleRepository).deleteById(articleId);
+        String userEmail = "pepe@email.com";
+        willDoNothing().given(articleRepository).deleteByIdAndUserAccount_Email(articleId, userEmail);
 
         // When
-        sut.deleteArticle(articleId);
+        sut.deleteArticle(articleId, userEmail);
 
         // Then
-        then(articleRepository).should().deleteById(articleId);
+        then(articleRepository).should().deleteByIdAndUserAccount_Email(articleId, userEmail);
     }
 
     @DisplayName("게시글 수를 조회하면, 게시글 수를 반환한다.")

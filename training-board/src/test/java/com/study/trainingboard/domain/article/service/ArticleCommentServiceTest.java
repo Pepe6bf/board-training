@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
@@ -66,7 +67,7 @@ class ArticleCommentServiceTest {
         given(articleCommentRepository.save(any(ArticleComment.class)))
                 .willReturn(null);
         given(userAccountRepository.findByEmail(dto.getUserAccountDto().getEmail()))
-                .willReturn(UserAccountFixture.createUserAccount());
+                .willReturn(Optional.of(UserAccountFixture.createUserAccount()));
 
         // When
         sut.saveArticleComment(dto);
@@ -135,12 +136,14 @@ class ArticleCommentServiceTest {
     void 게시글댓글_삭제_테스트() throws Exception {
         // Given
         Long articleCommentId = 1L;
-        willDoNothing().given(articleCommentRepository).deleteById(articleCommentId);
+        String userEmail = "pepe@email.com";
+
+        willDoNothing().given(articleCommentRepository).deleteByIdAndUserAccount_Email(articleCommentId, userEmail);
 
         // When
-        sut.deleteArticleComment(articleCommentId);
+        sut.deleteArticleComment(articleCommentId, userEmail);
 
         // Then
-        then(articleCommentRepository).should().deleteById(articleCommentId);
+        then(articleCommentRepository).should().deleteByIdAndUserAccount_Email(articleCommentId, userEmail);
     }
 }

@@ -20,6 +20,8 @@ public interface ArticleCommentRepository extends
 
     List<ArticleComment> findByArticle_Id(Long articleId);
 
+    void deleteByIdAndUserAccount_Email(Long articleId, String userEmail);
+
     @Override
     default void customize(
             QuerydslBindings bindings,
