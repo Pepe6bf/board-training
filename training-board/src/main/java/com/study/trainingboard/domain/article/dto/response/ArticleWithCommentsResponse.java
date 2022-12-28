@@ -16,6 +16,8 @@ public class ArticleWithCommentsResponse  {
     private final String hashtag;
     private final LocalDateTime createdAt;
     private final String nickname;
+
+    private final String userId;
     private final Set<ArticleCommentResponse> articleCommentsResponse;
 
     private ArticleWithCommentsResponse(
@@ -25,6 +27,7 @@ public class ArticleWithCommentsResponse  {
             String hashtag,
             LocalDateTime createdAt,
             String nickname,
+            String userId,
             Set<ArticleCommentResponse> articleCommentsResponse
     ) {
         this.id = id;
@@ -33,6 +36,7 @@ public class ArticleWithCommentsResponse  {
         this.hashtag = hashtag;
         this.createdAt = createdAt;
         this.nickname = nickname;
+        this.userId = userId;
         this.articleCommentsResponse = articleCommentsResponse;
     }
 
@@ -43,6 +47,7 @@ public class ArticleWithCommentsResponse  {
             String hashtag,
             LocalDateTime createdAt,
             String nickname,
+            String userId,
             Set<ArticleCommentResponse> articleCommentsResponse
     ) {
         return new ArticleWithCommentsResponse(
@@ -52,6 +57,7 @@ public class ArticleWithCommentsResponse  {
                 hashtag,
                 createdAt,
                 nickname,
+                userId,
                 articleCommentsResponse
         );
     }
@@ -64,6 +70,7 @@ public class ArticleWithCommentsResponse  {
                 dto.getHashtag(),
                 dto.getCreatedAt(),
                 dto.getUserAccountDto().getNickname(),
+                dto.getUserAccountDto().getEmail(),
                 dto.getArticleCommentDtos().stream()
                         .map(ArticleCommentResponse::from)
                         .collect(Collectors.toCollection(LinkedHashSet::new))
