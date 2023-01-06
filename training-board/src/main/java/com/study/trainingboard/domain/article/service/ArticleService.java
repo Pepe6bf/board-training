@@ -73,7 +73,7 @@ public class ArticleService {
     }
 
     public void saveArticle(ArticleDto dto) {
-        UserAccount userAccount = userAccountRepository.findByEmail(dto.getUserAccountDto().getEmail()).get();
+        UserAccount userAccount = userAccountRepository.findByEmail(dto.userAccountDto().getEmail()).get();
         articleRepository.save(dto.toEntity(userAccount));
     }
 
@@ -83,14 +83,14 @@ public class ArticleService {
     ) {
         try {
             Article savedArticle = articleRepository.getReferenceById(articleId);
-            UserAccount userAccount = userAccountRepository.findByEmail(dto.getUserAccountDto().getEmail())
+            UserAccount userAccount = userAccountRepository.findByEmail(dto.userAccountDto().getEmail())
                     .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자입니다."));
 
             if (savedArticle.getUserAccount().equals(userAccount)) {
                 savedArticle.update(
-                        dto.getTitle(),
-                        dto.getContent(),
-                        dto.getHashtag()
+                        dto.title(),
+                        dto.content(),
+                        dto.hashtag()
                 );
             }
         } catch (EntityNotFoundException e) {

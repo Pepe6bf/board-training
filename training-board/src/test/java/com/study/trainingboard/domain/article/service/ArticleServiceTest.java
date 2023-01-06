@@ -161,8 +161,8 @@ class ArticleServiceTest {
     void 게시글_생성_테스트() throws Exception {
         // Given
         ArticleDto dto = createArticleDto();
-        given(userAccountRepository.findByEmail(dto.getUserAccountDto().getEmail()))
-                .willReturn(Optional.of(dto.getUserAccountDto().toEntity()));
+        given(userAccountRepository.findByEmail(dto.userAccountDto().getEmail()))
+                .willReturn(Optional.of(dto.userAccountDto().toEntity()));
         given(articleRepository.save(any(Article.class)))
                 .willReturn(createArticle());
 
@@ -170,7 +170,7 @@ class ArticleServiceTest {
         sut.saveArticle(dto);
 
         // Then
-        then(userAccountRepository).should().findByEmail(dto.getUserAccountDto().getEmail());
+        then(userAccountRepository).should().findByEmail(dto.userAccountDto().getEmail());
         then(articleRepository).should().save(any(Article.class));
     }
 
@@ -184,21 +184,21 @@ class ArticleServiceTest {
                 "new content",
                 "#springboot"
         );
-        given(articleRepository.getReferenceById(articleDto.getId()))
+        given(articleRepository.getReferenceById(articleDto.id()))
                 .willReturn(article);
-        given(userAccountRepository.findByEmail(articleDto.getUserAccountDto().getEmail()))
+        given(userAccountRepository.findByEmail(articleDto.userAccountDto().getEmail()))
                 .willReturn(Optional.of(article.getUserAccount()));
 
         // When
-        sut.updateArticle(articleDto.getId(), articleDto);
+        sut.updateArticle(articleDto.id(), articleDto);
 
         // Then
         assertThat(article)
-                .hasFieldOrPropertyWithValue("title", articleDto.getTitle())
-                .hasFieldOrPropertyWithValue("content", articleDto.getContent())
-                .hasFieldOrPropertyWithValue("hashtag", articleDto.getHashtag());
-        then(articleRepository).should().getReferenceById(articleDto.getId());
-        then(userAccountRepository).should().findByEmail(articleDto.getUserAccountDto().getEmail());
+                .hasFieldOrPropertyWithValue("title", articleDto.title())
+                .hasFieldOrPropertyWithValue("content", articleDto.content())
+                .hasFieldOrPropertyWithValue("hashtag", articleDto.hashtag());
+        then(articleRepository).should().getReferenceById(articleDto.id());
+        then(userAccountRepository).should().findByEmail(articleDto.userAccountDto().getEmail());
     }
 
     @Test
@@ -210,14 +210,14 @@ class ArticleServiceTest {
                 "new content",
                 "#springboot"
         );
-        given(articleRepository.getReferenceById(articleDto.getId()))
+        given(articleRepository.getReferenceById(articleDto.id()))
                 .willThrow(EntityNotFoundException.class);
 
         // When
-        sut.updateArticle(articleDto.getId(), articleDto);
+        sut.updateArticle(articleDto.id(), articleDto);
 
         // Then
-        then(articleRepository).should().getReferenceById(articleDto.getId());
+        then(articleRepository).should().getReferenceById(articleDto.id());
     }
 
     @Test

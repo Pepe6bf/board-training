@@ -62,20 +62,20 @@ class ArticleCommentServiceTest {
     void 게시글댓글_생성_테스트() throws Exception {
         // Given
         ArticleCommentDto dto = ArticleCommentFixture.createArticleCommentDto("Comment");
-        given(articleRepository.getReferenceById(dto.getArticleId()))
+        given(articleRepository.getReferenceById(dto.articleId()))
                 .willReturn(ArticleFixture.createArticle());
         given(articleCommentRepository.save(any(ArticleComment.class)))
                 .willReturn(null);
-        given(userAccountRepository.findByEmail(dto.getUserAccountDto().getEmail()))
+        given(userAccountRepository.findByEmail(dto.userAccountDto().getEmail()))
                 .willReturn(Optional.of(UserAccountFixture.createUserAccount()));
 
         // When
         sut.saveArticleComment(dto);
 
         // Then
-        then(articleRepository).should().getReferenceById(dto.getArticleId());
+        then(articleRepository).should().getReferenceById(dto.articleId());
         then(articleCommentRepository).should().save(any(ArticleComment.class));
-        then(userAccountRepository).should().findByEmail(dto.getUserAccountDto().getEmail());
+        then(userAccountRepository).should().findByEmail(dto.userAccountDto().getEmail());
     }
 
     @Test
@@ -83,14 +83,14 @@ class ArticleCommentServiceTest {
     void 존재하지않는_게시글_댓글_생성_예외_테스트() throws Exception {
         // Given
         ArticleCommentDto dto = ArticleCommentFixture.createArticleCommentDto("Comment");
-        given(articleRepository.getReferenceById(dto.getArticleId()))
+        given(articleRepository.getReferenceById(dto.articleId()))
                 .willThrow(EntityNotFoundException.class);
 
         // When
         sut.saveArticleComment(dto);
 
         // Then
-        then(articleRepository).should().getReferenceById(dto.getArticleId());
+        then(articleRepository).should().getReferenceById(dto.articleId());
         then(userAccountRepository).shouldHaveNoInteractions();
         then(articleCommentRepository).shouldHaveNoInteractions();
     }
@@ -103,7 +103,7 @@ class ArticleCommentServiceTest {
         String updatedContent = "new content";
         ArticleComment articleComment = ArticleCommentFixture.createArticleComment(oldContent);
         ArticleCommentDto dto = ArticleCommentFixture.createArticleCommentDto(updatedContent);
-        given(articleCommentRepository.getReferenceById(dto.getId()))
+        given(articleCommentRepository.getReferenceById(dto.id()))
                 .willReturn(articleComment);
 
         // When
@@ -113,7 +113,7 @@ class ArticleCommentServiceTest {
         assertThat(articleComment.getContent())
                 .isNotEqualTo(oldContent)
                 .isEqualTo(updatedContent);
-        then(articleCommentRepository).should().getReferenceById(dto.getId());
+        then(articleCommentRepository).should().getReferenceById(dto.id());
     }
 
     @DisplayName("없는 댓글 정보를 수정하려고 하면, 경고 로그를 찍고 아무 것도 안 한다.")
@@ -121,14 +121,14 @@ class ArticleCommentServiceTest {
     void 존재하지않는댓글_수정시_예외_테스트() throws Exception {
         // Given
         ArticleCommentDto dto = ArticleCommentFixture.createArticleCommentDto("comment");
-        given(articleCommentRepository.getReferenceById(dto.getId()))
+        given(articleCommentRepository.getReferenceById(dto.id()))
                 .willThrow(EntityNotFoundException.class);
 
         // When
         sut.updateArticleComment(dto);
 
         // Then
-        then(articleCommentRepository).should().getReferenceById(dto.getId());
+        then(articleCommentRepository).should().getReferenceById(dto.id());
     }
 
     @Test

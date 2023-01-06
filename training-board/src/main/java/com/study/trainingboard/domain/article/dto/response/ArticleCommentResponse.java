@@ -30,11 +30,11 @@ public record ArticleCommentResponse(
 
     public static ArticleCommentResponse from(ArticleCommentDto dto) {
         return new ArticleCommentResponse(
-                dto.getId(),
-                dto.getContent(),
-                dto.getUserAccountDto().getNickname(),
-                dto.getUserAccountDto().getEmail(),
-                dto.getCreatedAt()
+                dto.id(),
+                dto.content(),
+                dto.userAccountDto().getNickname(),
+                dto.userAccountDto().getEmail(),
+                dto.createdAt()
         );
     }
 }

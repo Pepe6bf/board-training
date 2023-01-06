@@ -42,14 +42,14 @@ public record ArticleWithCommentsResponse(
 
     public static ArticleWithCommentsResponse from(ArticleWithCommentsDto dto) {
         return new ArticleWithCommentsResponse(
-                dto.getId(),
-                dto.getTitle(),
-                dto.getContent(),
-                dto.getHashtag(),
-                dto.getCreatedAt(),
-                dto.getUserAccountDto().getNickname(),
-                dto.getUserAccountDto().getEmail(),
-                dto.getArticleCommentDtos().stream()
+                dto.id(),
+                dto.title(),
+                dto.content(),
+                dto.hashtag(),
+                dto.createdAt(),
+                dto.userAccountDto().getNickname(),
+                dto.userAccountDto().getEmail(),
+                dto.articleCommentDtos().stream()
                         .map(ArticleCommentResponse::from)
                         .collect(Collectors.toCollection(LinkedHashSet::new))
         );
