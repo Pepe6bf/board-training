@@ -25,14 +25,14 @@ public record ArticleResponse(
     }
 
     public static ArticleResponse from(ArticleDto dto) {
-        String nickname = dto.userAccountDto().getNickname();
+        String nickname = dto.userAccountDto().nickname();
 
         return new ArticleResponse(
                 dto.id(),
                 dto.title(),
                 dto.content(),
                 dto.hashtag(),
-                dto.userAccountDto().getNickname(),
+                dto.userAccountDto().nickname(),
                 dto.createdAt()
         );
     }

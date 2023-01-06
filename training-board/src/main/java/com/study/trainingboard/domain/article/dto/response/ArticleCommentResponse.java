@@ -32,8 +32,8 @@ public record ArticleCommentResponse(
         return new ArticleCommentResponse(
                 dto.id(),
                 dto.content(),
-                dto.userAccountDto().getNickname(),
-                dto.userAccountDto().getEmail(),
+                dto.userAccountDto().nickname(),
+                dto.userAccountDto().email(),
                 dto.createdAt()
         );
     }

@@ -161,7 +161,7 @@ class ArticleServiceTest {
     void 게시글_생성_테스트() throws Exception {
         // Given
         ArticleDto dto = createArticleDto();
-        given(userAccountRepository.findByEmail(dto.userAccountDto().getEmail()))
+        given(userAccountRepository.findByEmail(dto.userAccountDto().email()))
                 .willReturn(Optional.of(dto.userAccountDto().toEntity()));
         given(articleRepository.save(any(Article.class)))
                 .willReturn(createArticle());
@@ -170,7 +170,7 @@ class ArticleServiceTest {
         sut.saveArticle(dto);
 
         // Then
-        then(userAccountRepository).should().findByEmail(dto.userAccountDto().getEmail());
+        then(userAccountRepository).should().findByEmail(dto.userAccountDto().email());
         then(articleRepository).should().save(any(Article.class));
     }
 
@@ -186,7 +186,7 @@ class ArticleServiceTest {
         );
         given(articleRepository.getReferenceById(articleDto.id()))
                 .willReturn(article);
-        given(userAccountRepository.findByEmail(articleDto.userAccountDto().getEmail()))
+        given(userAccountRepository.findByEmail(articleDto.userAccountDto().email()))
                 .willReturn(Optional.of(article.getUserAccount()));
 
         // When
@@ -198,7 +198,7 @@ class ArticleServiceTest {
                 .hasFieldOrPropertyWithValue("content", articleDto.content())
                 .hasFieldOrPropertyWithValue("hashtag", articleDto.hashtag());
         then(articleRepository).should().getReferenceById(articleDto.id());
-        then(userAccountRepository).should().findByEmail(articleDto.userAccountDto().getEmail());
+        then(userAccountRepository).should().findByEmail(articleDto.userAccountDto().email());
     }
 
     @Test

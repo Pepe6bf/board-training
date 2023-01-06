@@ -1,37 +1,18 @@
 package com.study.trainingboard.domain.article.dto;
 
 import com.study.trainingboard.domain.article.model.entity.UserAccount;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-@Getter
-public class UserAccountDto {
-    private final String email;
-    private final String password;
-    private final String nickname;
-    private final LocalDateTime createdAt;
-    private final String createdBy;
-    private final LocalDateTime updatedAt;
-    private final String updatedBy;
-
-    private UserAccountDto(
-            String email,
-            String password,
-            String  nickname,
-            LocalDateTime createdAt,
-            String createdBy,
-            LocalDateTime updatedAt,
-            String updatedBy
-    ) {
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
-        this.createdAt = createdAt;
-        this.createdBy = createdBy;
-        this.updatedAt = updatedAt;
-        this.updatedBy = updatedBy;
-    }
+public record UserAccountDto(
+        String email,
+        String password,
+        String nickname,
+        LocalDateTime createdAt,
+        String createdBy,
+        LocalDateTime updatedAt,
+        String updatedBy
+) {
 
     public static UserAccountDto of(
             String email,
@@ -89,3 +70,4 @@ public class UserAccountDto {
         );
     }
 }
+

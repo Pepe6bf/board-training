@@ -49,9 +49,9 @@ public class BoardPrincipal implements UserDetails {
 
     public static BoardPrincipal from(UserAccountDto dto) {
         return BoardPrincipal.of(
-                dto.getEmail(),
-                dto.getPassword(),
-                dto.getNickname()
+                dto.email(),
+                dto.password(),
+                dto.nickname()
         );
     }
 

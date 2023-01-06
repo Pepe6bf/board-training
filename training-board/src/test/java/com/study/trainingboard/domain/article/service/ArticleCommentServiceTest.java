@@ -66,7 +66,7 @@ class ArticleCommentServiceTest {
                 .willReturn(ArticleFixture.createArticle());
         given(articleCommentRepository.save(any(ArticleComment.class)))
                 .willReturn(null);
-        given(userAccountRepository.findByEmail(dto.userAccountDto().getEmail()))
+        given(userAccountRepository.findByEmail(dto.userAccountDto().email()))
                 .willReturn(Optional.of(UserAccountFixture.createUserAccount()));
 
         // When
@@ -75,7 +75,7 @@ class ArticleCommentServiceTest {
         // Then
         then(articleRepository).should().getReferenceById(dto.articleId());
         then(articleCommentRepository).should().save(any(ArticleComment.class));
-        then(userAccountRepository).should().findByEmail(dto.userAccountDto().getEmail());
+        then(userAccountRepository).should().findByEmail(dto.userAccountDto().email());
     }
 
     @Test

@@ -47,8 +47,8 @@ public record ArticleWithCommentsResponse(
                 dto.content(),
                 dto.hashtag(),
                 dto.createdAt(),
-                dto.userAccountDto().getNickname(),
-                dto.userAccountDto().getEmail(),
+                dto.userAccountDto().nickname(),
+                dto.userAccountDto().email(),
                 dto.articleCommentDtos().stream()
                         .map(ArticleCommentResponse::from)
                         .collect(Collectors.toCollection(LinkedHashSet::new))
