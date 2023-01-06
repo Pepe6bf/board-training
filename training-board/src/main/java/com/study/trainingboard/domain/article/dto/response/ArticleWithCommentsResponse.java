@@ -1,44 +1,22 @@
 package com.study.trainingboard.domain.article.dto.response;
 
 import com.study.trainingboard.domain.article.dto.ArticleWithCommentsDto;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Getter
-public class ArticleWithCommentsResponse  {
-    private final Long id;
-    private final String title;
-    private final String content;
-    private final String hashtag;
-    private final LocalDateTime createdAt;
-    private final String nickname;
-
-    private final String userId;
-    private final Set<ArticleCommentResponse> articleCommentsResponse;
-
-    private ArticleWithCommentsResponse(
-            Long id,
-            String title,
-            String content,
-            String hashtag,
-            LocalDateTime createdAt,
-            String nickname,
-            String userId,
-            Set<ArticleCommentResponse> articleCommentsResponse
-    ) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.hashtag = hashtag;
-        this.createdAt = createdAt;
-        this.nickname = nickname;
-        this.userId = userId;
-        this.articleCommentsResponse = articleCommentsResponse;
-    }
+public record ArticleWithCommentsResponse(
+        Long id,
+        String title,
+        String content,
+        String hashtag,
+        LocalDateTime createdAt,
+        String nickname,
+        String userId,
+        Set<ArticleCommentResponse> articleCommentsResponse
+) {
 
     public static ArticleWithCommentsResponse of(
             Long id,
@@ -77,3 +55,5 @@ public class ArticleWithCommentsResponse  {
         );
     }
 }
+
+

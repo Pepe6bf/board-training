@@ -25,7 +25,7 @@ public class ArticleCommentViewController {
     ) {
         articleCommentService.saveArticleComment(request.toDto(boardPrincipal.toDto()));
 
-        return "redirect:/articles/" + request.getArticleId();
+        return "redirect:/articles/" + request.articleId();
     }
 
     @PostMapping("/{commentId}/delete")

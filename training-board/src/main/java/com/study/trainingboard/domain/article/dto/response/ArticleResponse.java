@@ -1,34 +1,17 @@
 package com.study.trainingboard.domain.article.dto.response;
 
 import com.study.trainingboard.domain.article.dto.ArticleDto;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-@Getter
-public class ArticleResponse {
-    private final Long id;
-    private final String title;
-    private final String content;
-    private final String hashtag;
-    private final String nickname;
-    private final LocalDateTime createdAt;
-
-    private ArticleResponse(
-            Long id,
-            String title,
-            String content,
-            String hashtag,
-            String nickname,
-            LocalDateTime createdAt
-    ) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.hashtag = hashtag;
-        this.nickname = nickname;
-        this.createdAt = createdAt;
-    }
+public record ArticleResponse(
+        Long id,
+        String title,
+        String content,
+        String hashtag,
+        String nickname,
+        LocalDateTime createdAt
+) {
 
     public static ArticleResponse of(
             Long id,
@@ -38,14 +21,7 @@ public class ArticleResponse {
             String nickname,
             LocalDateTime createdAt
     ) {
-        return new ArticleResponse(
-                id,
-                title,
-                content,
-                hashtag,
-                nickname,
-                createdAt
-        );
+        return new ArticleResponse(id, title, content, hashtag, nickname, createdAt);
     }
 
     public static ArticleResponse from(ArticleDto dto) {
