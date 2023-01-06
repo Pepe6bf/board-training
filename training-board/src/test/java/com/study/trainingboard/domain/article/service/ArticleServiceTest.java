@@ -6,7 +6,6 @@ import com.study.trainingboard.domain.article.model.constant.SearchType;
 import com.study.trainingboard.domain.article.model.entity.Article;
 import com.study.trainingboard.domain.article.repository.ArticleRepository;
 import com.study.trainingboard.domain.article.repository.UserAccountRepository;
-import com.study.trainingboard.global.util.fixture.UserAccountFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +21,6 @@ import java.util.Optional;
 
 import static com.study.trainingboard.global.util.fixture.ArticleFixture.createArticle;
 import static com.study.trainingboard.global.util.fixture.ArticleFixture.createArticleDto;
-import static com.study.trainingboard.global.util.fixture.UserAccountFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
@@ -254,7 +252,7 @@ class ArticleServiceTest {
     }
 
     @DisplayName("해시태그를 조회하면, 유니크 해시태그 리스트를 반환한다")
-    @Test        
+    @Test
     void 해시태그_조회시_유니크해시태그리스트_반환_테스트() throws Exception {
         // Given
         List<String> expectedHashtags = List.of("#java", "#spring", "#boot");
@@ -263,7 +261,7 @@ class ArticleServiceTest {
 
         // When
         List<String> actualHashtags = sut.getHashtags();
-        
+
         // Then
         assertThat(actualHashtags).isEqualTo(expectedHashtags);
         then(articleRepository).should().findAllDistinctHashtags();
