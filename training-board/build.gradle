@@ -47,6 +47,9 @@ dependencies {
 
 	// Configuration Processor
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+	// Bean Validation
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 tasks.named('test') {
